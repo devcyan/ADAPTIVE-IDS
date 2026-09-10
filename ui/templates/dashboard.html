@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ADAPTIVE-IDS</title>
+</head>
+
+<body>
+
+    <h1>ADAPTIVE-IDS</h1>
+    <p>Intrusion Detection System</p>
+
+    <h2>System Status</h2>
+    <p>● IDS Online</p>
+
+    <h2>Traffic</h2>
+
+    <div>
+        <h3>Packets Captured</h3>
+        <p id="packets">0</p>
+    </div>
+
+    <div>
+        <h3>TCP Packets</h3>
+        <p id="tcp">0</p>
+    </div>
+
+    <div>
+        <h3>UDP Packets</h3>
+        <p id="udp">0</p>
+    </div>
+
+    <div>
+        <h3>ICMP Packets</h3>
+        <p id="icmp">0</p>
+    </div>
+
+    <script>
+        async function updateStats() {
+            const response = await fetch("/api/stats");
+            const data = await response.json();
+
+            document.getElementById("packets").textContent = data.packets;
+            document.getElementById("tcp").textContent = data.tcp;
+            document.getElementById("udp").textContent = data.udp;
+            document.getElementById("icmp").textContent = data.icmp;
+        }
+
+        updateStats();
+
+        setInterval(updateStats, 1000);
+    </script>
+
+</body>
+</html>
