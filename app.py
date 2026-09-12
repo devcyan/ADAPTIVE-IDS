@@ -1,10 +1,16 @@
 from flask import Flask, render_template, jsonify
 from threading import Thread
+import logging
 
-from ids import start_capture, stats
+from ids import start_capture, stats, recent_packets
 
 
 app = Flask(__name__, template_folder="ui/templates")
+
+
+# Disable Flask request/access logs
+log = logging.getLogger("werkzeug")
+log.setLevel(logging.ERROR)
 
 
 @app.route("/")
@@ -15,6 +21,11 @@ def home():
 @app.route("/api/stats")
 def get_stats():
     return jsonify(stats)
+
+
+@app.route("/api/packets")
+def get_packets():
+    return jsonify(list(recent_packets))
 
 
 if __name__ == "__main__":

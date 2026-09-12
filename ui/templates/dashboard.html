@@ -37,7 +37,36 @@
         <p id="icmp">0</p>
     </div>
 
+    <div>
+        <h3>ARP Packets</h3>
+        <p id="arp">0</p>
+    </div>
+
+    <div>
+        <h3>Other Packets</h3>
+        <p id="other">0</p>
+    </div>
+
+
+    <h2>Live Packet Log</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Protocol</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Info</th>
+            </tr>
+        </thead>
+
+        <tbody id="packet-log">
+        </tbody>
+    </table>
+
+
     <script>
+
         async function updateStats() {
             const response = await fetch("/api/stats");
             const data = await response.json();
@@ -46,11 +75,41 @@
             document.getElementById("tcp").textContent = data.tcp;
             document.getElementById("udp").textContent = data.udp;
             document.getElementById("icmp").textContent = data.icmp;
+            document.getElementById("arp").textContent = data.arp;
+            document.getElementById("other").textContent = data.other;
         }
 
+
+        async function updatePackets() {
+            const response = await fetch("/api/packets");
+            const packets = await response.json();
+
+            const table = document.getElementById("packet-log");
+
+            table.innerHTML = "";
+
+            packets.slice().reverse().forEach(packet => {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${packet.protocol}</td>
+                    <td>${packet.source}</td>
+                    <td>${packet.destination}</td>
+                    <td>${packet.info}</td>
+                `;
+
+                table.appendChild(row);
+            });
+        }
+
+
         updateStats();
+        updatePackets();
 
         setInterval(updateStats, 1000);
+        setInterval(updatePackets, 1000);
+
     </script>
 
 </body>
