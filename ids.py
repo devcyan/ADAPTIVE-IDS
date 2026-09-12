@@ -13,6 +13,7 @@ stats = {
     "other": 0
 }
 
+
 recent_packets = deque(maxlen=50)
 
 
@@ -26,32 +27,40 @@ def process_packet(packet):
 
     timestamp = datetime.now().strftime("%H:%M:%S")
 
+    # Get IP addresses
     if packet.haslayer(IP):
         source = packet[IP].src
         destination = packet[IP].dst
 
+    # TCP
     if packet.haslayer(TCP):
         stats["tcp"] += 1
         protocol = "TCP"
         info = f"{packet[TCP].sport} → {packet[TCP].dport}"
 
+    # UDP
     elif packet.haslayer(UDP):
         stats["udp"] += 1
         protocol = "UDP"
         info = f"{packet[UDP].sport} → {packet[UDP].dport}"
 
+    # ICMP
     elif packet.haslayer(ICMP):
         stats["icmp"] += 1
         protocol = "ICMP"
         info = "ICMP packet"
 
+    # ARP
     elif packet.haslayer(ARP):
         stats["arp"] += 1
         protocol = "ARP"
+
         source = packet[ARP].psrc
         destination = packet[ARP].pdst
+
         info = "ARP request/reply"
 
+    # Everything else
     else:
         stats["other"] += 1
 

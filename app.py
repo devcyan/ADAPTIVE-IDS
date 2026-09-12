@@ -5,7 +5,11 @@ import logging
 from ids import start_capture, stats, recent_packets
 
 
-app = Flask(__name__, template_folder="ui/templates")
+app = Flask(
+    __name__,
+    template_folder="ui/templates",
+    static_folder="ui/static"
+)
 
 
 # Disable Flask request/access logs

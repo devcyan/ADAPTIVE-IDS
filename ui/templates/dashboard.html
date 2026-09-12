@@ -2,29 +2,43 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>ADAPTIVE-IDS</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
 </head>
+
 
 <body>
 
     <div class="container">
 
         <header>
+
             <h1>ADAPTIVE-IDS</h1>
+
             <p>Intrusion Detection System</p>
 
-            <span class="status">● IDS ONLINE</span>
+            <span class="status">
+                ● IDS ONLINE
+            </span>
+
         </header>
 
 
         <section>
 
-            <h2 class="section-title">Traffic Overview</h2>
+            <h2 class="section-title">
+                Traffic Overview
+            </h2>
+
 
             <div class="stats">
 
@@ -33,25 +47,30 @@
                     <p id="packets">0</p>
                 </div>
 
+
                 <div class="card">
                     <h3>TCP Packets</h3>
                     <p id="tcp">0</p>
                 </div>
+
 
                 <div class="card">
                     <h3>UDP Packets</h3>
                     <p id="udp">0</p>
                 </div>
 
+
                 <div class="card">
                     <h3>ICMP Packets</h3>
                     <p id="icmp">0</p>
                 </div>
 
+
                 <div class="card">
                     <h3>ARP Packets</h3>
                     <p id="arp">0</p>
                 </div>
+
 
                 <div class="card">
                     <h3>Other Packets</h3>
@@ -65,7 +84,10 @@
 
         <section>
 
-            <h2 class="section-title">Live Packet Log</h2>
+            <h2 class="section-title">
+                Live Packet Log
+            </h2>
+
 
             <div class="table-container">
 
@@ -74,15 +96,20 @@
                     <table>
 
                         <thead>
+
                             <tr>
+                                <th>Time</th>
                                 <th>Protocol</th>
                                 <th>Source</th>
                                 <th>Destination</th>
                                 <th>Info</th>
                             </tr>
+
                         </thead>
 
+
                         <tbody id="packet-log">
+
                         </tbody>
 
                     </table>
@@ -101,44 +128,69 @@
         async function updateStats() {
 
             const response = await fetch("/api/stats");
+
             const data = await response.json();
 
-            document.getElementById("packets").textContent = data.packets;
-            document.getElementById("tcp").textContent = data.tcp;
-            document.getElementById("udp").textContent = data.udp;
-            document.getElementById("icmp").textContent = data.icmp;
-            document.getElementById("arp").textContent = data.arp;
-            document.getElementById("other").textContent = data.other;
+
+            document.getElementById("packets").textContent =
+                data.packets;
+
+            document.getElementById("tcp").textContent =
+                data.tcp;
+
+            document.getElementById("udp").textContent =
+                data.udp;
+
+            document.getElementById("icmp").textContent =
+                data.icmp;
+
+            document.getElementById("arp").textContent =
+                data.arp;
+
+            document.getElementById("other").textContent =
+                data.other;
         }
 
 
         async function updatePackets() {
 
             const response = await fetch("/api/packets");
+
             const packets = await response.json();
 
-            const table = document.getElementById("packet-log");
+
+            const table =
+                document.getElementById("packet-log");
+
 
             table.innerHTML = "";
 
+
             packets.slice().reverse().forEach(packet => {
 
-                const row = document.createElement("tr");
+                const row =
+                    document.createElement("tr");
+
 
                 row.innerHTML = `
+                    <td>${packet.time}</td>
                     <td>${packet.protocol}</td>
                     <td>${packet.source}</td>
                     <td>${packet.destination}</td>
                     <td>${packet.info}</td>
                 `;
 
+
                 table.appendChild(row);
+
             });
+
         }
 
 
         updateStats();
         updatePackets();
+
 
         setInterval(updateStats, 1000);
         setInterval(updatePackets, 1000);
