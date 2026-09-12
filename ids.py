@@ -1,4 +1,6 @@
 from collections import deque
+from datetime import datetime
+
 from scapy.all import sniff, IP, TCP, UDP, ICMP, ARP
 
 
@@ -21,6 +23,8 @@ def process_packet(packet):
     source = "-"
     destination = "-"
     info = packet.summary()
+
+    timestamp = datetime.now().strftime("%H:%M:%S")
 
     if packet.haslayer(IP):
         source = packet[IP].src
@@ -52,6 +56,7 @@ def process_packet(packet):
         stats["other"] += 1
 
     recent_packets.append({
+        "time": timestamp,
         "protocol": protocol,
         "source": source,
         "destination": destination,

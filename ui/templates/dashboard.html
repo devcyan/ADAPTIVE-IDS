@@ -1,73 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>ADAPTIVE-IDS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
 <body>
 
-    <h1>ADAPTIVE-IDS</h1>
-    <p>Intrusion Detection System</p>
+    <div class="container">
 
-    <h2>System Status</h2>
-    <p>● IDS Online</p>
+        <header>
+            <h1>ADAPTIVE-IDS</h1>
+            <p>Intrusion Detection System</p>
 
-    <h2>Traffic</h2>
+            <span class="status">● IDS ONLINE</span>
+        </header>
 
-    <div>
-        <h3>Packets Captured</h3>
-        <p id="packets">0</p>
+
+        <section>
+
+            <h2 class="section-title">Traffic Overview</h2>
+
+            <div class="stats">
+
+                <div class="card">
+                    <h3>Packets Captured</h3>
+                    <p id="packets">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>TCP Packets</h3>
+                    <p id="tcp">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>UDP Packets</h3>
+                    <p id="udp">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>ICMP Packets</h3>
+                    <p id="icmp">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>ARP Packets</h3>
+                    <p id="arp">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Other Packets</h3>
+                    <p id="other">0</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section>
+
+            <h2 class="section-title">Live Packet Log</h2>
+
+            <div class="table-container">
+
+                <div class="packet-log">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Protocol</th>
+                                <th>Source</th>
+                                <th>Destination</th>
+                                <th>Info</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="packet-log">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </div>
-
-    <div>
-        <h3>TCP Packets</h3>
-        <p id="tcp">0</p>
-    </div>
-
-    <div>
-        <h3>UDP Packets</h3>
-        <p id="udp">0</p>
-    </div>
-
-    <div>
-        <h3>ICMP Packets</h3>
-        <p id="icmp">0</p>
-    </div>
-
-    <div>
-        <h3>ARP Packets</h3>
-        <p id="arp">0</p>
-    </div>
-
-    <div>
-        <h3>Other Packets</h3>
-        <p id="other">0</p>
-    </div>
-
-
-    <h2>Live Packet Log</h2>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Protocol</th>
-                <th>Source</th>
-                <th>Destination</th>
-                <th>Info</th>
-            </tr>
-        </thead>
-
-        <tbody id="packet-log">
-        </tbody>
-    </table>
 
 
     <script>
 
         async function updateStats() {
+
             const response = await fetch("/api/stats");
             const data = await response.json();
 
@@ -81,6 +113,7 @@
 
 
         async function updatePackets() {
+
             const response = await fetch("/api/packets");
             const packets = await response.json();
 
@@ -113,4 +146,5 @@
     </script>
 
 </body>
+
 </html>
