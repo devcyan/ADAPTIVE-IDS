@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify
 from threading import Thread
 import logging
 
-from ids import start_capture, stats, recent_packets
+from ids import start_capture, stats, recent_packets, alerts
 
 
 app = Flask(
@@ -30,6 +30,11 @@ def get_stats():
 @app.route("/api/packets")
 def get_packets():
     return jsonify(list(recent_packets))
+
+
+@app.route("/api/alerts")
+def get_alerts():
+    return jsonify(list(alerts))
 
 
 if __name__ == "__main__":

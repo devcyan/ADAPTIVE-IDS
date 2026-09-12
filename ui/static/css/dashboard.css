@@ -169,3 +169,13 @@ tbody tr:hover {
     }
 
 }
+.alert-log {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.alert-log td[colspan="5"] {
+    text-align: center;
+    color: #94a3b8;
+    padding: 25px;
+}

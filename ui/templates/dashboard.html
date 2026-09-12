@@ -85,6 +85,45 @@
         <section>
 
             <h2 class="section-title">
+                Security Alerts
+            </h2>
+
+
+            <div class="table-container">
+
+                <div class="alert-log">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Time</th>
+                                <th>Severity</th>
+                                <th>Type</th>
+                                <th>Source</th>
+                                <th>Description</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="alert-log">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section>
+
+            <h2 class="section-title">
                 Live Packet Log
             </h2>
 
@@ -188,12 +227,69 @@
         }
 
 
+        async function updateAlerts() {
+
+            const response = await fetch("/api/alerts");
+
+            const alerts = await response.json();
+
+
+            const table =
+                document.getElementById("alert-log");
+
+
+            table.innerHTML = "";
+
+
+            if (alerts.length === 0) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+                    <td colspan="5">
+                        No threats detected
+                    </td>
+                `;
+
+
+                table.appendChild(row);
+
+                return;
+            }
+
+
+            alerts.slice().reverse().forEach(alert => {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+                    <td>${alert.time}</td>
+                    <td>${alert.severity}</td>
+                    <td>${alert.type}</td>
+                    <td>${alert.source}</td>
+                    <td>${alert.description}</td>
+                `;
+
+
+                table.appendChild(row);
+
+            });
+
+        }
+
+
         updateStats();
         updatePackets();
+        updateAlerts();
 
 
         setInterval(updateStats, 1000);
         setInterval(updatePackets, 1000);
+        setInterval(updateAlerts, 1000);
 
     </script>
 

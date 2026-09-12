@@ -16,6 +16,8 @@ stats = {
 
 recent_packets = deque(maxlen=50)
 
+alerts = deque(maxlen=50)
+
 
 def process_packet(packet):
     stats["packets"] += 1
