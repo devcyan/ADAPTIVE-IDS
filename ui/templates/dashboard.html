@@ -4,7 +4,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>ADAPTIVE-IDS</title>
 
@@ -18,198 +22,202 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <header>
+    <!-- Header -->
 
-            <h1>ADAPTIVE-IDS</h1>
+    <header>
 
-            <p>Intrusion Detection System</p>
+        <h1>ADAPTIVE-IDS</h1>
 
-            <span class="status">
-                ● IDS ONLINE
-            </span>
+        <p>Intrusion Detection System</p>
 
-        </header>
+        <span class="status">
+            ● IDS ONLINE
+        </span>
 
-
-        <section>
-
-            <h2 class="section-title">
-                Traffic Overview
-            </h2>
+    </header>
 
 
-            <div class="stats">
+    <!-- Traffic Overview -->
 
-                <div class="card">
-                    <h3>Packets Captured</h3>
-                    <p id="packets">0</p>
-                </div>
+    <section>
+
+        <h2 class="section-title">
+            Traffic Overview
+        </h2>
+
+        <div class="stats">
+
+            <div class="card">
+                <h3>Packets Captured</h3>
+                <p id="packets">0</p>
+            </div>
+
+            <div class="card">
+                <h3>TCP Packets</h3>
+                <p id="tcp">0</p>
+            </div>
+
+            <div class="card">
+                <h3>UDP Packets</h3>
+                <p id="udp">0</p>
+            </div>
+
+            <div class="card">
+                <h3>ICMP Packets</h3>
+                <p id="icmp">0</p>
+            </div>
+
+            <div class="card">
+                <h3>ARP Packets</h3>
+                <p id="arp">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Other Packets</h3>
+                <p id="other">0</p>
+            </div>
+
+        </div>
+
+    </section>
 
 
-                <div class="card">
-                    <h3>TCP Packets</h3>
-                    <p id="tcp">0</p>
-                </div>
+    <!-- Security Alerts -->
 
+    <section>
 
-                <div class="card">
-                    <h3>UDP Packets</h3>
-                    <p id="udp">0</p>
-                </div>
+        <h2 class="section-title">
+            Security Alerts
+        </h2>
 
+        <div class="table-container">
 
-                <div class="card">
-                    <h3>ICMP Packets</h3>
-                    <p id="icmp">0</p>
-                </div>
+            <div class="alert-log">
 
+                <table>
 
-                <div class="card">
-                    <h3>ARP Packets</h3>
-                    <p id="arp">0</p>
-                </div>
+                    <thead>
 
+                        <tr>
+                            <th>Time</th>
+                            <th>Severity</th>
+                            <th>Type</th>
+                            <th>Source</th>
+                            <th>Description</th>
+                        </tr>
 
-                <div class="card">
-                    <h3>Other Packets</h3>
-                    <p id="other">0</p>
-                </div>
+                    </thead>
+
+                    <tbody id="alert-log"></tbody>
+
+                </table>
 
             </div>
 
-        </section>
+        </div>
+
+    </section>
 
 
-        <section>
+    <!-- Live Packet Log -->
 
-            <h2 class="section-title">
-                Security Alerts
-            </h2>
+    <section>
 
+        <h2 class="section-title">
+            Live Packet Log
+        </h2>
 
-            <div class="table-container">
+        <div class="table-container">
 
-                <div class="alert-log">
+            <div class="packet-log">
 
-                    <table>
+                <table>
 
-                        <thead>
+                    <thead>
 
-                            <tr>
-                                <th>Time</th>
-                                <th>Severity</th>
-                                <th>Type</th>
-                                <th>Source</th>
-                                <th>Description</th>
-                            </tr>
+                        <tr>
+                            <th>Time</th>
+                            <th>Protocol</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Info</th>
+                        </tr>
 
-                        </thead>
+                    </thead>
 
+                    <tbody id="packet-log"></tbody>
 
-                        <tbody id="alert-log">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+                </table>
 
             </div>
 
-        </section>
+        </div>
+
+    </section>
+
+</div>
 
 
-        <section>
+<script>
 
-            <h2 class="section-title">
-                Live Packet Log
-            </h2>
+    // =========================
+    // Update Statistics
+    // =========================
 
+    async function updateStats() {
 
-            <div class="table-container">
+        const response =
+            await fetch("/api/stats");
 
-                <div class="packet-log">
+        const data =
+            await response.json();
 
-                    <table>
+        document.getElementById("packets")
+            .textContent = data.packets;
 
-                        <thead>
+        document.getElementById("tcp")
+            .textContent = data.tcp;
 
-                            <tr>
-                                <th>Time</th>
-                                <th>Protocol</th>
-                                <th>Source</th>
-                                <th>Destination</th>
-                                <th>Info</th>
-                            </tr>
+        document.getElementById("udp")
+            .textContent = data.udp;
 
-                        </thead>
+        document.getElementById("icmp")
+            .textContent = data.icmp;
 
+        document.getElementById("arp")
+            .textContent = data.arp;
 
-                        <tbody id="packet-log">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </div>
+        document.getElementById("other")
+            .textContent = data.other;
+    }
 
 
-    <script>
+    // =========================
+    // Update Packet Log
+    // =========================
 
-        async function updateStats() {
+    async function updatePackets() {
 
-            const response = await fetch("/api/stats");
+        const response =
+            await fetch("/api/packets");
 
-            const data = await response.json();
+        const packets =
+            await response.json();
 
+        const table =
+            document.getElementById("packet-log");
 
-            document.getElementById("packets").textContent =
-                data.packets;
+        table.innerHTML = "";
 
-            document.getElementById("tcp").textContent =
-                data.tcp;
-
-            document.getElementById("udp").textContent =
-                data.udp;
-
-            document.getElementById("icmp").textContent =
-                data.icmp;
-
-            document.getElementById("arp").textContent =
-                data.arp;
-
-            document.getElementById("other").textContent =
-                data.other;
-        }
-
-
-        async function updatePackets() {
-
-            const response = await fetch("/api/packets");
-
-            const packets = await response.json();
-
-
-            const table =
-                document.getElementById("packet-log");
-
-
-            table.innerHTML = "";
-
-
-            packets.slice().reverse().forEach(packet => {
+        packets
+            .slice()
+            .reverse()
+            .forEach(packet => {
 
                 const row =
                     document.createElement("tr");
-
 
                 row.innerHTML = `
                     <td>${packet.time}</td>
@@ -219,52 +227,52 @@
                     <td>${packet.info}</td>
                 `;
 
-
                 table.appendChild(row);
 
             });
+    }
 
+
+    // =========================
+    // Update Alerts
+    // =========================
+
+    async function updateAlerts() {
+
+        const response =
+            await fetch("/api/alerts");
+
+        const alerts =
+            await response.json();
+
+        const table =
+            document.getElementById("alert-log");
+
+        table.innerHTML = "";
+
+        if (alerts.length === 0) {
+
+            const row =
+                document.createElement("tr");
+
+            row.innerHTML = `
+                <td colspan="5">
+                    No threats detected
+                </td>
+            `;
+
+            table.appendChild(row);
+
+            return;
         }
 
-
-        async function updateAlerts() {
-
-            const response = await fetch("/api/alerts");
-
-            const alerts = await response.json();
-
-
-            const table =
-                document.getElementById("alert-log");
-
-
-            table.innerHTML = "";
-
-
-            if (alerts.length === 0) {
+        alerts
+            .slice()
+            .reverse()
+            .forEach(alert => {
 
                 const row =
                     document.createElement("tr");
-
-
-                row.innerHTML = `
-                    <td colspan="5">
-                        No threats detected
-                    </td>
-                `;
-
-
-                table.appendChild(row);
-
-                return;
-            }
-
-
-            alerts.slice().reverse().forEach(alert => {
-
-                const row =
-                    document.createElement("tr");
-
 
                 row.innerHTML = `
                     <td>${alert.time}</td>
@@ -274,24 +282,27 @@
                     <td>${alert.description}</td>
                 `;
 
-
                 table.appendChild(row);
 
             });
-
-        }
-
-
-        updateStats();
-        updatePackets();
-        updateAlerts();
+    }
 
 
-        setInterval(updateStats, 1000);
-        setInterval(updatePackets, 1000);
-        setInterval(updateAlerts, 1000);
+    // Initial update
 
-    </script>
+    updateStats();
+    updatePackets();
+    updateAlerts();
+
+
+    // Refresh every second
+
+    setInterval(updateStats, 1000);
+    setInterval(updatePackets, 1000);
+    setInterval(updateAlerts, 1000);
+
+</script>
+
 
 </body>
 
