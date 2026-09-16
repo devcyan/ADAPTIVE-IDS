@@ -6,6 +6,13 @@ from scapy.all import sniff, IP, TCP, UDP, ICMP, ARP
 
 
 # =========================
+# Network Interface
+# =========================
+
+INTERFACE = "eth1"
+
+
+# =========================
 # Traffic Statistics
 # =========================
 
@@ -179,13 +186,13 @@ def process_packet(packet):
 def start_capture():
 
     print("[+] ADAPTIVE-IDS started")
-    print("[+] Listening on eth1...")
+    print(f"[+] Listening on {INTERFACE}...")
     print("[+] Dashboard: http://127.0.0.1:5000")
     print("[+] Port-scan detection enabled")
     print("[+] Press Ctrl+C to stop")
 
     sniff(
-        iface="eth1",
+        iface=INTERFACE,
         prn=process_packet,
         store=False
     )
